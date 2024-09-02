@@ -392,7 +392,7 @@ type heldLockInfo struct {
 	rank     lockRank
 }
 
-type g struct {
+type g struct { // jxh: Goroutine
 	// Stack parameters.
 	// stack describes the actual stack memory: [stack.lo, stack.hi).
 	// stackguard0 is the stack pointer compared in the Go stack growth prologue.
@@ -983,7 +983,7 @@ type _defer struct {
 // handling during stack growth: because they are pointer-typed and
 // _panic values only live on the stack, regular stack pointer
 // adjustment takes care of them.
-type _panic struct {
+type _panic struct { // jxh: panic()
 	argp unsafe.Pointer // pointer to arguments of deferred call run during panic; cannot move - known to liblink
 	arg  any            // argument to panic
 	link *_panic        // link to earlier panic

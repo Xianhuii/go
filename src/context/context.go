@@ -65,7 +65,7 @@ import (
 // API boundaries.
 //
 // Context's methods may be called by multiple goroutines simultaneously.
-type Context interface {
+type Context interface { // jxh: 上下文接口
 	// Deadline returns the time when work done on behalf of this context
 	// should be canceled. Deadline returns ok==false when no deadline is
 	// set. Successive calls to Deadline return the same results.

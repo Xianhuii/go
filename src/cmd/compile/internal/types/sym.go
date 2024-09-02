@@ -25,11 +25,11 @@ import (
 //
 // NOTE: In practice, things can be messier than the description above
 // for various reasons (historical, convenience).
-type Sym struct {
+type Sym struct { // jxh: 全限定类名
 	Linkname string // link name
 
-	Pkg  *Pkg
-	Name string // object name
+	Pkg  *Pkg   // jxh: 所属包
+	Name string // object name // jxh: 名称
 
 	// The unique ONAME, OTYPE, OPACK, or OLITERAL node that this symbol is
 	// bound to within the current scope. (Most parts of the compiler should

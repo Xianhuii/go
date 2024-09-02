@@ -18,16 +18,16 @@ import (
 // Object represents an ir.Node, but without needing to import cmd/compile/internal/ir,
 // which would cause an import cycle. The uses in other packages must type assert
 // values of type Object to ir.Node or a more specific type.
-type Object interface {
-	Pos() src.XPos
-	Sym() *Sym
-	Type() *Type
+type Object interface { // jxh: 对象通用接口
+	Pos() src.XPos // jxh: 返回对象位置
+	Sym() *Sym     // jxh: 对象全限定类名
+	Type() *Type   // jxh: 对象类型信息
 }
 
 //go:generate stringer -type Kind -trimprefix T type.go
 
 // Kind describes a kind of type.
-type Kind uint8
+type Kind uint8 // jxh: 对象类型描述符
 
 const (
 	Txxx Kind = iota
@@ -83,7 +83,7 @@ const (
 )
 
 // ChanDir is whether a channel can send, receive, or both.
-type ChanDir uint8
+type ChanDir uint8 // jxh: 通道地址
 
 func (c ChanDir) CanRecv() bool { return c&Crecv != 0 }
 func (c ChanDir) CanSend() bool { return c&Csend != 0 }
@@ -158,7 +158,7 @@ var DefaultKinds = [...]Kind{
 // already exists at package scope and is available at sym.Def.(*ir.Name).Type().
 // Local types (which may have the same name as a package-level type) are
 // distinguished by their vargen, which is embedded in their symbol name.
-type Type struct {
+type Type struct { // jxh: 类型
 	// extra contains extra etype-specific fields.
 	// As an optimization, those etype-specific structs which contain exactly
 	// one pointer-shaped field are stored as values rather than pointers when possible.
@@ -181,7 +181,7 @@ type Type struct {
 	width int64 // valid if Align > 0
 
 	// list of base methods (excluding embedding)
-	methods fields
+	methods fields // jxh: 对象方法
 	// list of all methods (including embedding)
 	allMethods fields
 
@@ -196,7 +196,7 @@ type Type struct {
 		slice *Type // []T, or nil
 	}
 
-	kind  Kind  // kind of type
+	kind  Kind  // kind of type // jxh: 对象类型
 	align uint8 // the required alignment of this type, in bytes (0 means Width and Align have not yet been computed)
 
 	intRegs, floatRegs uint8 // registers needed for ABIInternal
@@ -310,7 +310,7 @@ func (t *Type) IsFullyInstantiated() bool {
 }
 
 // Map contains Type fields specific to maps.
-type Map struct {
+type Map struct { // jxh: map类型
 	Key  *Type // Key type
 	Elem *Type // Val (elem) type
 
@@ -373,7 +373,7 @@ func (t *Type) funcType() *Func {
 }
 
 // StructType contains Type fields specific to struct types.
-type Struct struct {
+type Struct struct { // jxh: 结构信息
 	fields fields
 
 	// Maps have three associated internal structs (see struct MapType).
@@ -521,7 +521,7 @@ func (f *fields) Set(s []*Field) {
 }
 
 // newType returns a new Type of the specified kind.
-func newType(et Kind) *Type {
+func newType(et Kind) *Type { // jxh: 实例化类型，分配类型
 	t := &Type{
 		kind:  et,
 		width: BADWIDTH,
@@ -556,7 +556,7 @@ func newType(et Kind) *Type {
 }
 
 // NewArray returns a new fixed-length array Type.
-func NewArray(elem *Type, bound int64) *Type {
+func NewArray(elem *Type, bound int64) *Type { // jxh: 创建数组类型
 	if bound < 0 {
 		base.Fatalf("NewArray: invalid bound %v", bound)
 	}
@@ -572,7 +572,7 @@ func NewArray(elem *Type, bound int64) *Type {
 }
 
 // NewSlice returns the slice Type with element type elem.
-func NewSlice(elem *Type) *Type {
+func NewSlice(elem *Type) *Type { // jxh: 创建slice类型
 	if t := elem.cache.slice; t != nil {
 		if t.Elem() != elem {
 			base.Fatalf("elem mismatch")
@@ -593,7 +593,7 @@ func NewSlice(elem *Type) *Type {
 }
 
 // NewChan returns a new chan Type with direction dir.
-func NewChan(elem *Type, dir ChanDir) *Type {
+func NewChan(elem *Type, dir ChanDir) *Type { // jxh: 创建chan类型
 	t := newType(TCHAN)
 	ct := t.chanType()
 	ct.Elem = elem

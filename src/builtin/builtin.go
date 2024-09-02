@@ -305,6 +305,6 @@ func println(args ...Type)
 
 // The error built-in interface type is the conventional interface for
 // representing an error condition, with the nil value representing no error.
-type error interface {
+type error interface { // jxh: 错误顶级接口
 	Error() string
 }
